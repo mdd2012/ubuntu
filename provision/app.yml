@@ -1,0 +1,53 @@
+---
+- hosts: 127.0.0.1
+  sudo: yes
+  tasks:
+    - name: "add-apt-repository ppa:webupd8team/atom"
+      apt_repository: repo='ppa:webupd8team/atom'
+    - name: Apt install atom git
+      apt: pkg={{ item }} force=yes update_cache=yes
+      with_items:
+        - atom
+        - git
+
+    - name: download slack
+      get_url:
+        url="https://slack-ssb-updates.global.ssl.fastly.net/linux_releases/slack-desktop-1.2.6-amd64.deb"
+        dest=/tmp/slack-desktop-1.2.6-amd64.deb
+
+    - name: install slack
+      sudo: true
+      apt: deb=/tmp/slack-desktop-1.2.6-amd64.deb
+
+    - name: add-apt-repository wine
+      apt_repository: repo='ppa:ubuntu-wine/ppa'
+
+    - name: Apt install wine
+      apt: pkg={{ item }} force=yes update_cache=yes
+      with_items:
+        - wine1.7
+
+    - name: download kindle
+      get_url:
+        url="http://www.amazon.co.jp/kindlepcdownload"
+        dest=/tmp/KindleForPC-installer.exe
+
+    - name: download vagrant
+      get_url:
+        url="https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb"
+        dest=/tmp/vagrant_1.8.1_x86_64.deb
+
+    - name: install vagrant
+      sudo: true
+      apt: deb=/tmp/vagrant_1.8.1_x86_64.deb
+
+
+
+    - name: download VirtualBox
+      get_url:
+        url="http://download.virtualbox.org/virtualbox/5.0.12/virtualbox-5.0_5.0.12-104815~Ubuntu~trusty_amd64.deb"
+        dest=/tmp/virtualbox-5.0_5.0.12-104815~Ubuntu~trusty_amd64.deb
+
+    - name: install VirtualBox
+      sudo: true
+      apt: deb=/tmp/virtualbox-5.0_5.0.12-104815~Ubuntu~trusty_amd64.deb
