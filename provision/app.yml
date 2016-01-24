@@ -1,14 +1,21 @@
 ---
-- hosts: 127.0.0.1
+- hosts: all
   sudo: yes
   tasks:
     - name: "add-apt-repository ppa:webupd8team/atom"
       apt_repository: repo='ppa:webupd8team/atom'
+
+    - name: "add-apt-repository ppa:pinta-maintainers/pinta-stable"
+      apt_repository: repo='ppa:pinta-maintainers/pinta-stable'
+
     - name: Apt install atom git
       apt: pkg={{ item }} force=yes update_cache=yes
       with_items:
         - atom
         - git
+        - keepassx
+        - gnome-paint
+        - pinta
 
     - name: download slack
       get_url:
@@ -31,17 +38,13 @@
       get_url:
         url="http://www.amazon.co.jp/kindlepcdownload"
         dest=/tmp/KindleForPC-installer.exe
-
     - name: download vagrant
       get_url:
         url="https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb"
         dest=/tmp/vagrant_1.8.1_x86_64.deb
-
     - name: install vagrant
       sudo: true
       apt: deb=/tmp/vagrant_1.8.1_x86_64.deb
-
-
 
     - name: download VirtualBox
       get_url:
@@ -51,3 +54,12 @@
     - name: install VirtualBox
       sudo: true
       apt: deb=/tmp/virtualbox-5.0_5.0.12-104815~Ubuntu~trusty_amd64.deb
+
+    - name: download DropboxlBox
+      get_url:
+        url="https://www.dropbox.com/download?dl=packages/ubuntu/dropbox_2015.10.28_amd64.deb"
+        dest=/tmp/dropbox_2015.10.28_amd64.deb
+
+    - name: install Dropbox    
+      sudo: true
+      apt: deb=/tmp/dropbox_2015.10.28_amd64.deb
